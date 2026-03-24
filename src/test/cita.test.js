@@ -3,7 +3,7 @@ const path = require('path');
 const FileStorage = require('../src/storage/fileStorage');
 
 describe('FileStorage - Persistencia JSON', () => {
-  const testFilePath = path.join(__dirname, '../data/test-appointments.json');
+  const testFilePath = path.join(__dirname, '../index.json');
   let storage;
 
   beforeEach(async () => {
@@ -324,14 +324,13 @@ describe('FileStorage - Persistencia JSON', () => {
   describe('Manejo de errores y edge cases', () => {
     
     test('❌ debe manejar archivo JSON corrupto', async () => {
-      // Escribir JSON inválido
       await fs.writeFile(testFilePath, 'esto no es json {');
 
       await expect(storage.getAll()).rejects.toThrow();
     });
 
     test('✅ debe manejar archivo vacío como array vacío', async () => {
-      await fs.writeFile(testFilePath, ''); // Archivo vacío
+      await fs.writeFile(testFilePath, '');
       
       const all = await storage.getAll();
       expect(all).toEqual([]);
